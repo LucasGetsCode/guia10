@@ -1,9 +1,13 @@
 from typing import List
+import os
+
 
 # 1. Archivos
 # Ejercicio 1. Implementar en python:
-ejemplo = "/home/Intro_programacion/Descargas/ejemplo.txt"
-ejemplo2 = "/home/Intro_programacion/Descargas/ejemplo2.txt"
+# ejemplo = "/home/Intro_programacion/Descargas/ejemplo.txt"
+# ejemplo2 = "/home/Intro_programacion/Descargas/ejemplo2.txt"
+ejemplo = "ejemplo.txt"
+ejemplo2 = "ejemplo2.txt"
 # 1. una funci ́on contarlineas(in nombre archivo : str) → int que cuenta la cantidad de l ́ıneas de texto del archivo dado
 def contar_lineas(path: str) -> int:
     with open(path, "r") as file:
@@ -164,11 +168,117 @@ def agregar_frase_al_principio(path: str, frase: str):
 # que tienen longitud >= 5
 # Una vez implementada la funci ́on, probarla con diferentes archivos binarios (.exe, .zip, .wav, .mp3, etc).
 # Referencia: https://docs.python.org/es/3/library/functions.html#open
-def palabras_legibles_binario(path: str):
-    pass
+def palabras_legibles_binario(path: str) -> List[str]:
+    def es_palabra_valida(palabra):
+        if len(palabra) >= 5:
+            for letra in palabra:
+                if letra not in "0123456789abcdefghijklmnñopqrstuvwxzABCDEFGHIJKLMNÑOPQRSTUVWXZ_":
+                    return False
+            return True
+        else:
+            return False
 
+    palabras: List[str] = []
+    with open(path, "r") as file:
+        for linea in file.readlines():
+            for palabra in separar_palabras(linea):
+                if es_palabra_valida(palabra):
+                    palabras.append(palabra)
+
+    return palabras
+# print(palabras_legibles_binario("../__pycache__/Guia8Listas.cpython-37.pyc"))
+
+########
 # Cuando se abre un archivo el cursor está al principio. Si se lee una línea el cursor se mueve, si se sigue haciendo algo se hace desde ahí.
 # O sea, si leo todas las líneas y quiero escribir algo, se escribe al final. Si leo una línea y después hago readlines() voy a leer todas menos la primera.
 # Entonces para volver al principio se puede o cerrar y volver a abrir el archivo, o usar file.seek(0), haciendo que el cursor vaya a la línea 0
 
 # Al trabajar con pilas, colas, etc. utilizar únicamente las funciones que te dan (por ej, no iterar)
+########
+
+# 2. Pilas 
+# Ejercicio 8. Implementar una funci´on generarNrosAlAzar(in n : int, in desde : int, in hasta : int) → list[int] que genere
+# una lista de n numeros enteros al azar en el rango [desde, hasta]. Pueden user la funci´on random.sample()
+from random import sample
+def generar_numeros_al_azar(n: int, desde: int, hasta: int) -> List[int]:
+    rango = range(desde, hasta+1)
+    return sample(rango, n)
+# print(generar_numeros_al_azar(5, 10, 20))
+
+# Ejercicio 9. Usando la funci´on del punto anterior, implementar otra funci´on que arme una pila con los numeros generados al
+# azar. Pueden usar la clase LifoQueue() que es un ejemplo de una implementaci´on b´asica:
+# from queue import LifoQueue as Pila
+# p = Pila()
+# p.put(1)             # apilar
+# elemento = p.get ()   # desapilar
+# p.empty()            # vacia ?
+from queue import LifoQueue as Pila
+def pila_azarosa(n: int, desde: int, hasta: int) -> Pila:
+    n = max(1, n)
+    pila = Pila()
+    for i in generar_numeros_al_azar(n, desde, hasta):
+        pila.put(i)
+    return pila
+# print(pila_azarosa(5, 10, 20))
+
+# Ejercicio 10. Implementar una funci´on cantidadElementos(in p : pila) → int que, dada una pila, cuente la cantidad de
+# elementos que contiene.
+def cantidad_de_elementos(p: Pila) -> int:
+    i: int = 0
+    while not p.empty():
+        i += 1
+        p.get()
+    return i
+# print(cantidad_de_elementos(pila_azarosa(10, 10, 20)))
+
+# Ejercicio 11. Dada una pila de enteros, implementar una funci´on buscarElMaximo(in p : pila) → int que devuelva el m´aximo elemento.
+def buscar_el_maximo(p: Pila) -> int:
+    maximo: int = p.get()
+    while not p.empty():
+        maximo = max(maximo, p.get())
+    return maximo
+# print(buscar_el_maximo(pila_azarosa(5, 10, 20)))
+
+# Ejercicio 12. Implementar una funci´on estaBienBalanceada(in s : str) → bool que dado un string con una formula aritm´etica
+# sobre los enteros, diga si los par´entesis estan bien balanceados. Las f´ormulas pueden formarse con:
+# los numeros enteros
+# las operaciones basicas +, −, x y /
+# parentesis
+# espacios
+# Entonces las siguientes son formulas aritm´eticas con sus par´entesis bien balanceados:
+# 1 + ( 2 x 3 = ( 2 0 / 5 ) )
+# 10 * ( 1 + ( 2 * (-1)))
+# Y la siguiente es una formula que no tiene los par´entesis bien balanceados:
+# 1 + ) 2 x 3 ( ( )
+def esta_bien_balanceada(s: str) -> bool:
+    def sacar_espacios(texto: str) -> str:
+        res = ""
+        for i in texto:
+            if i != " ":
+                res += i
+        return res
+
+    parentesis_abiertos: int = 0
+    ultimo_caracter: str = ""
+    s = sacar_espacios(s)
+    for i in s:
+        if i == ")":
+            if parentesis_abiertos > 0:
+                parentesis_abiertos -= 1
+            else:
+                return False
+            if ultimo_caracter in "+-*/":
+                return False
+        if i == "(":
+            parentesis_abiertos += 1
+        if ultimo_caracter == "(" and i in "*/)":
+            return False
+        ultimo_caracter = i
+    return True
+
+print(esta_bien_balanceada("(1)+(3*2)/(5)*6"))
+print(esta_bien_balanceada("1 +  2 x 3 = ( 2 0 / 5 ) )"))
+print(esta_bien_balanceada("10 * ( 1 + ( 2  (-1))"))
+print(esta_bien_balanceada("(1 + (1)) 2 x 3 ( ( 2)   )"))
+
+            
