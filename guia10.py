@@ -147,5 +147,28 @@ def agregar_frase_al_principio(path: str, frase: str):
         print(texto)
         for linea in texto:
             file.write(linea)
+    # También 
+    # def agregar_frase_al_inicio(file_name, frase):
+        # file = open(file_name, "r")
+        # lines = [frase+"\n"] + file.readlines()
+        # file.close()
+        # file = open(file_name, "w")
+        # for line in lines:
+        #   file.write(line)
+        # file.close()
 # agregar_frase_al_principio(ejemplo2, "Hola Don José\nHola Don Pepito\nChau a todos")
 
+# Ejercicio 6. Implementar una funci ́on que lea un archivo en modo *binario* y devuelva la lista de ’palabras legibles’. Vamos a
+# definir una palabra legible como
+# secuencias de texto formadas por numeros, letras mayusculas/minusculas y los caracteres ’ ’(espacio) y ’_’(guion bajo)
+# que tienen longitud >= 5
+# Una vez implementada la funci ́on, probarla con diferentes archivos binarios (.exe, .zip, .wav, .mp3, etc).
+# Referencia: https://docs.python.org/es/3/library/functions.html#open
+def palabras_legibles_binario(path: str):
+    pass
+
+# Cuando se abre un archivo el cursor está al principio. Si se lee una línea el cursor se mueve, si se sigue haciendo algo se hace desde ahí.
+# O sea, si leo todas las líneas y quiero escribir algo, se escribe al final. Si leo una línea y después hago readlines() voy a leer todas menos la primera.
+# Entonces para volver al principio se puede o cerrar y volver a abrir el archivo, o usar file.seek(0), haciendo que el cursor vaya a la línea 0
+
+# Al trabajar con pilas, colas, etc. utilizar únicamente las funciones que te dan (por ej, no iterar)
