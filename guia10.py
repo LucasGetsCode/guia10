@@ -38,7 +38,6 @@ def separar_palabras(texto: str) -> List[str]:
     return palabras
 
 def cantidad_apariciones(path: str, palabra: str) -> int:
-    longitud_palabra = len(palabra)
     # counter: int = 0
     # with open(path, "r") as file:
     #     for linea in file.readlines():
@@ -46,31 +45,52 @@ def cantidad_apariciones(path: str, palabra: str) -> int:
     #             if palabra == i:
     #                 counter += 1
     # return counter
+    longitud_palabra: int = len(palabra)
     counter: int = 0
-    palabra_parcial = ""
+    palabra_parcial: str = ""
+    numero_de_linea: int = 0
     with open(path, "r") as file:
         for linea in file.readlines():
-            i = 0
+            numero_de_columna: int = (-longitud_palabra + 1)
+            numero_de_linea += 1
+            i: int = 0
             while len(linea) >= longitud_palabra and i < len(linea):
-                print(i)
                 if linea[i] == palabra[i]:
                     palabra_parcial += linea[i]
-                    print(linea)
+                    # print(palabra_parcial)
                     if palabra_parcial == palabra:
                         counter += 1
                         linea = linea[(i+1):]
+                        numero_de_columna += i + 1
+                        print(f"Línea: {numero_de_linea}. Columna: {numero_de_columna}")
                         i = 0
                         palabra_parcial = ""
-                        print(linea)
                     else:
                         i += 1
                 else:
                     linea = linea[1:]
+                    palabra_parcial = ""
+                    numero_de_columna += i + 1
                     i = 0
     return counter
-                
-                
+print(cantidad_apariciones(ejemplo, "all too well"))
 
-
-
-print(cantidad_apariciones(ejemplo, "all"))
+# Ejercicio 2. Dado un archivo de texto con comentarios, implementar una funci ́on clonarSinComentarios(innombre archivo : str)
+# que toma un archivo de entrada y genera un nuevo archivo que tiene el contenido original sin las l ́ıneas comentadas. Para este
+# ejercicio vamos a considerar comentarios como aquellas l ́ıneas que tienen un caracter # como primer caracter de la l ́ınea, o si no
+# es el primer caracter, se cumple que todos los anteriores son espacios.
+"""Ejemplo:
+# esto es un comentario
+# esto tambien
+esto no es un comentario # esto tampoco"""
+def clonar_sin_comentarios(path: str) -> str:
+    with open(path, "r") as file:
+        for linea in file.readlines():
+            seguir: bool = True
+            i: int = 0
+            while seguir:
+                if linea[i] == "#":
+                    seguir = False
+                elif linea[i] == " ":
+                    i += 1
+    return "hola"
