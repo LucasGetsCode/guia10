@@ -121,6 +121,8 @@ def generar_reverso(path: str):
     with open("reverso.txt", "w") as file:
         for linea in texto_final:
             file.writelines(linea)
+    # También podría usarse
+    # for i in range(len(file.readlines()-1, -1, -1)): empieza desde la longitud-1, y llega hasta 0 (ya que es < y no <=)
 # generar_reverso(ejemplo2)
 
 # Ejercicio 4. Dado un archivo de texto y una frase (es decir, texto que puede estar separado por ’\n’), implementar una funci ́on
@@ -130,4 +132,20 @@ def agregar_frase(path: str, frase: str):
     with open(path, "a") as file:
         for linea in frase_separada:
             file.write("\n"+linea)
-agregar_frase(ejemplo2, "Hola Don José\nHola Don Pepito\nChau a todos")
+# agregar_frase(ejemplo2, "Hola Don José\nHola Don Pepito\nChau a todos")
+
+# Ejercicio 5. idem, pero agregando la frase al comienzo del archivo original (de nuevo, sin hacer una copia del archivo).
+def agregar_frase_al_principio(path: str, frase: str):
+    frase_separada: List[str] = frase.split("\n")
+    texto: List[str] = []
+    with open(path, "r") as file:
+        texto = file.readlines()
+        print(texto)
+    with open(path, "w") as file:
+        for linea in frase_separada:
+            file.write(linea+"\n")
+        print(texto)
+        for linea in texto:
+            file.write(linea)
+# agregar_frase_al_principio(ejemplo2, "Hola Don José\nHola Don Pepito\nChau a todos")
+

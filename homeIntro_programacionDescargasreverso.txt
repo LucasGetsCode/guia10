@@ -1,6 +1,0 @@
-    # aaa    # Vuelven los comentarios
-Todos comenten #NoSoyComentario
-Más texto
-Este es un texto
-# Otro comentario
-# Comentario
