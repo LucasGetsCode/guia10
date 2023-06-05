@@ -275,10 +275,77 @@ def esta_bien_balanceada(s: str) -> bool:
             return False
         ultimo_caracter = i
     return True
+# print(esta_bien_balanceada("(1)+(3*2)/(5)*6"))
 
-print(esta_bien_balanceada("(1)+(3*2)/(5)*6"))
-print(esta_bien_balanceada("1 +  2 x 3 = ( 2 0 / 5 ) )"))
-print(esta_bien_balanceada("10 * ( 1 + ( 2  (-1))"))
-print(esta_bien_balanceada("(1 + (1)) 2 x 3 ( ( 2)   )"))
+# 3. Colas
+# Ejercicio 13. Usando la funci´on generarNrosAlAzar() definida en la secci´on anterior, implementar una funci´on que arme una
+# cola de enteros con los numeros generados al azar. Pueden usar la clase Queue() que es un ejemplo de una implementaci´on b´asica:
+# from queue import Queue as Cola
+# c = Cola()
+# c.put(1)           # encolar
+# elemento = c.get() # desencolar()
+# c.empty()          # vacia ?
+from queue import Queue as Cola
+def cola_azarosa(n: int, desde: int, hasta: int) -> Cola:
+    n = max(1, n)
+    pila = Cola()
+    for i in generar_numeros_al_azar(n, desde, hasta):
+        pila.put(i)
+    return pila
+# print(cola_azarosa(5,10,20))
 
-            
+# Ejercicio 14. Implementar una funci´on cantidadElementos(in c : cola) → int que, dada una cola, cuente la cantidad de
+# elementos que contiene. Comparar con la versi´on usando pila.def cantidad_de_elementos(p: Pila) -> int:
+def cantidad_de_elementos_cola(p: Cola) -> int:
+    i: int = 0
+    while not p.empty():
+        i += 1
+        p.get()
+    return i
+# print(cantidad_de_elementos_cola(cola_azarosa(5,10,20)))
+
+# Ejercicio 15. Dada una cola de enteros, implementar una funci´on buscarElMaximo(in c : cola) → int que devuelva el m´aximo
+# elemento. Comparar con la versi´n usando pila.
+def buscar_el_maximo_cola(q: Cola) -> int:
+    p = q
+    maximo: int = p.get()
+    while not p.empty():
+        maximo = max(maximo, p.get())           ####### NO RESPETA EL "IN" DE LA ESPECIFICACIÓN
+    print(cantidad_de_elementos_cola(q))
+    return maximo
+# print(buscar_el_maximo_cola(cola_azarosa(5,10,20)))
+
+# Ejercicio 16. Bingo: un cart´on de bingo contiene 12 n´umeros al azar en el rango [0, 99].
+# 1. implementar una funci´on armarSecuenciaDeBingo() → Cola[int] que genere una cola con los n´umeros del 0 al 99 ordenados
+# al azar.
+def armar_secuencia_de_bingo() -> "Cola[int]":
+    numeros = list(range(0,100))
+    cola = Cola()
+    while len(numeros) > 0:
+        i = sample(range(len(numeros)), 1)[0]
+        cola.put(numeros.pop(i))
+    return cola
+# print(cantidad_de_elementos_cola(armar_secuencia_de_bingo()))
+
+# 2. implementar una funci´on jugarCartonDeBingo(in carton : list[int], in bolillero : cola[int]) → int que toma un cart´on
+# de Bingo y una cola de enteros (que corresponden a las bolillas numeradas) y determina cual es la cantidad de jugadas de
+# ese bolillero que se necesitan para ganar.
+def jugar_carton_de_bingo(carton: List[int], bolillero: "Cola[int]") -> int:
+    jugadas: int = 0
+    while not bolillero.empty():
+        bola = bolillero.get()
+        if bola in carton:
+            carton.remove(bola)
+        jugadas += 1
+        if len(carton) == 0:
+            return jugadas
+    return -1
+# print(jugar_carton_de_bingo([1,2,3,4,5,6,7,8,9,10,11,12], armar_secuencia_de_bingo()))
+
+# Ejercicio 17. Vamos a modelar una guardia de un hospital usando una cola donde se van almacenando los pedidos de atenci´on
+# para los pacientes que van llegando. A cada paciente se le asigna una prioridad del 1 al 10 (donde la prioridad 1 es la mas urgente
+# y requiere atenci´on inmediata) junto con su nombre y la especialidad medica que le corresponde.
+# Implementar la funci´on nPacientesUrgentes(in c : Cola[(int, str, str)]) → int que devuelve la cantidad de pacientes de
+# la cola que tienen prioridad en el rango [1, 3].
+def pacientes_urgentes(c: "Cola[tuple]") -> int:
+    pass
