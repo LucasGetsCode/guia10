@@ -117,9 +117,17 @@ def generar_reverso(path: str):
     # new_path: str = "".join((path.split("/")[:-1]))
     texto_final[0] += "\n"
     if "\n" in texto_final[-1]:
-        texto_final[-1] = "\n".join(texto_final[-1].split("\n"))
+        texto_final[-1] = "\n".join(texto_final[-1].split("\n")[:-1])
     with open("reverso.txt", "w") as file:
         for linea in texto_final:
             file.writelines(linea)
+# generar_reverso(ejemplo2)
 
-generar_reverso(ejemplo2)
+# Ejercicio 4. Dado un archivo de texto y una frase (es decir, texto que puede estar separado por ’\n’), implementar una funci ́on
+# que la agregue al final del archivo original (sin hacer una copia).
+def agregar_frase(path: str, frase: str):
+    frase_separada: List[str] = frase.split("\n")
+    with open(path, "a") as file:
+        for linea in frase_separada:
+            file.write("\n"+linea)
+agregar_frase(ejemplo2, "Hola Don José\nHola Don Pepito\nChau a todos")
