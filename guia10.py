@@ -3,6 +3,7 @@ from typing import List
 # 1. Archivos
 # Ejercicio 1. Implementar en python:
 ejemplo = "/home/Intro_programacion/Descargas/ejemplo.txt"
+ejemplo2 = "/home/Intro_programacion/Descargas/ejemplo2.txt"
 # 1. una funci ́on contarlineas(in nombre archivo : str) → int que cuenta la cantidad de l ́ıneas de texto del archivo dado
 def contar_lineas(path: str) -> int:
     with open(path, "r") as file:
@@ -73,7 +74,7 @@ def cantidad_apariciones(path: str, palabra: str) -> int:
                     numero_de_columna += i + 1
                     i = 0
     return counter
-print(cantidad_apariciones(ejemplo, "all too well"))
+# print(cantidad_apariciones(ejemplo, "all too well"))
 
 # Ejercicio 2. Dado un archivo de texto con comentarios, implementar una funci ́on clonarSinComentarios(innombre archivo : str)
 # que toma un archivo de entrada y genera un nuevo archivo que tiene el contenido original sin las l ́ıneas comentadas. Para este
@@ -85,6 +86,7 @@ print(cantidad_apariciones(ejemplo, "all too well"))
 esto no es un comentario # esto tampoco"""
 def clonar_sin_comentarios(path: str) -> str:
     with open(path, "r") as file:
+        texto_final: List[str] = []
         for linea in file.readlines():
             seguir: bool = True
             i: int = 0
@@ -93,4 +95,9 @@ def clonar_sin_comentarios(path: str) -> str:
                     seguir = False
                 elif linea[i] == " ":
                     i += 1
-    return "hola"
+                else:
+                    texto_final.append(linea)
+                    seguir = False
+    return "".join(texto_final)
+
+print(clonar_sin_comentarios(ejemplo2))
