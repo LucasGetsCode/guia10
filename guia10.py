@@ -99,5 +99,27 @@ def clonar_sin_comentarios(path: str) -> str:
                     texto_final.append(linea)
                     seguir = False
     return "".join(texto_final)
+# print(clonar_sin_comentarios(ejemplo2))
 
-print(clonar_sin_comentarios(ejemplo2))
+# Ejercicio 3. Dado un archivo de texto, implementar una funci ́on que escribe un archivo nuevo (‘reverso.txt‘) que tiene las
+# mismas l ́ıneas que el original, pero en el orden inverso.
+# Ejemplo: si el archivo original es
+# Esta es la primer linea .
+# Y esta es la segunda .
+# debe generar:
+# Y esta es la segunda .
+# Esta es la primer linea .
+def generar_reverso(path: str):
+    texto_final: List[str] = []
+    with open(path, "r") as file:
+        for linea in file.readlines():
+            texto_final.insert(0, linea)
+    # new_path: str = "".join((path.split("/")[:-1]))
+    texto_final[0] += "\n"
+    if "\n" in texto_final[-1]:
+        texto_final[-1] = "\n".join(texto_final[-1].split("\n"))
+    with open("reverso.txt", "w") as file:
+        for linea in texto_final:
+            file.writelines(linea)
+
+generar_reverso(ejemplo2)
