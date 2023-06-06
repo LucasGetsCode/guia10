@@ -348,4 +348,31 @@ def jugar_carton_de_bingo(carton: List[int], bolillero: "Cola[int]") -> int:
 # Implementar la funci´on nPacientesUrgentes(in c : Cola[(int, str, str)]) → int que devuelve la cantidad de pacientes de
 # la cola que tienen prioridad en el rango [1, 3].
 def pacientes_urgentes(c: "Cola[tuple]") -> int:
-    pass
+    cantidad: int = 0
+    while not c.empty():
+        paciente: tuple[(int, str, str)] = c.get()
+        if paciente[0] <= 3:
+            cantidad += 1
+    return cantidad
+
+# 4. Diccionarios
+# Para esta secci´on vamos a usar el tipo dict que nos provee python:
+# Ejercicio 18. Leer un archivo de texto y agrupar la cantidad de palabras de acuerdo a su longitud. Implementar la funci´on
+# agruparPorLongitud(in nombre archivo : str) → dict que devuelve un diccionario {longitud en letras : cantidad de palabras}.
+# Ej el diccionario
+# { 1: 2 ,
+#   2: 10 ,
+#   5: 4 }
+# indica que se encontraron 2 palabras de longitud 1, 10 palabras de longitud 2 y 5 palabras de longitud 4. Para este ejercicio
+# vamos a considerar palabras a todas aquellas secuencias de caracteres que no tengan espacios en blanco.
+def agrupar_por_longitud(path: str) -> dict:
+    cantidad_palabras: dict = {}
+    with open(path, "r") as file:
+        for linea in file.readlines():
+            for palabra in separar_palabras(linea):
+                if palabra in cantidad_palabras:
+                    cantidad_palabras[palabra] += 1
+                else:
+                    cantidad_palabras[palabra] = 1
+    return cantidad_palabras
+print(agrupar_por_longitud(ejemplo))
