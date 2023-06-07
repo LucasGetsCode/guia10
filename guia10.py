@@ -1,5 +1,6 @@
 from typing import List
-import os
+from typing import Dict
+# import os
 
 
 # 1. Archivos
@@ -188,6 +189,40 @@ def palabras_legibles_binario(path: str) -> List[str]:
     return palabras
 # print(palabras_legibles_binario("../__pycache__/Guia8Listas.cpython-37.pyc"))
 
+# Ejercicio 7. Implementar una funci´on que lea un archivo de texto separado por comas (comma-separated values, o .csv) que
+# contiene las notas de toda la carrera de un grupo de alumnos y calcule el promedio final de un alumno dado. La funci´on
+# promedioEstudiante(in lu : str) → float. El archivo tiene el siguiente formato:
+# nro de LU (str) , materia (str) , fecha (str) , nota (float)
+
+def leer_csv(path: str) -> list([(str, str, str, float)]):
+    notas: list([(str, str, str, float)]) = []
+    with open(path, "r") as file:
+        for linea in file.readlines():
+            alumno: List[str] = linea.split(",")
+            alumno[3] = float(alumno[3])
+            notas.append(tuple(alumno))
+    return notas
+
+def promedio(elementos: List[float], retorno_sin_elementos: float = -1, redondear: int = 2) -> float:
+    promedio: float = 0
+    longitud: int = len(elementos)
+    for i in elementos:
+        promedio += i
+    if longitud == 0:
+        return retorno_sin_elementos
+    return round(promedio/longitud, redondear)
+
+
+def promedio_estudiante(lu: str, path: str) -> float:
+    notas_generales: list([(str, str, str, float)]) = leer_csv(path)
+    notas_alumno: List[float] = []
+    for nota in notas_generales:
+        if nota[0] == lu:
+            notas_alumno.append(nota[3])
+    return promedio(notas_alumno)
+# print(promedio_estudiante("197/22", "notas_estudiantes.cvs"))
+    
+
 ########
 # Cuando se abre un archivo el cursor está al principio. Si se lee una línea el cursor se mueve, si se sigue haciendo algo se hace desde ahí.
 # O sea, si leo todas las líneas y quiero escribir algo, se escribe al final. Si leo una línea y después hago readlines() voy a leer todas menos la primera.
@@ -365,7 +400,7 @@ def pacientes_urgentes(c: "Cola[tuple]") -> int:
 #   5: 4 }
 # indica que se encontraron 2 palabras de longitud 1, 10 palabras de longitud 2 y 5 palabras de longitud 4. Para este ejercicio
 # vamos a considerar palabras a todas aquellas secuencias de caracteres que no tengan espacios en blanco.
-def agrupar_por_longitud(path: str) -> dict:
+def agrupar_por_longitud(path: str) -> Dict[str, int]:
     cantidad_palabras: dict = {}
     with open(path, "r") as file:
         for linea in file.readlines():
@@ -375,4 +410,33 @@ def agrupar_por_longitud(path: str) -> dict:
                 else:
                     cantidad_palabras[palabra] = 1
     return cantidad_palabras
-print(agrupar_por_longitud(ejemplo))
+# print(agrupar_por_longitud(ejemplo))
+
+# Ejercicio 19. Volver a implementar la funci´on que calcula el promedio de las notas de los alumnos, pero ahora devolver un
+# diccionario {libreta universitaria : promedio} con los promedios de todos los alumnos
+def promedio_alumnos(path: str) -> Dict[str, float]:
+    notas_generales: list([(str, str, str, float)]) = leer_csv(path)
+    alumnos: Dict[str, List[float]] = {}
+    for nota in notas_generales:
+        if nota[0] in alumnos:
+            alumnos[nota[0]].append(nota[3])
+        else:
+            alumnos[nota[0]] = [nota[3]]
+    promedios: Dict[str, float] = {}
+    for alumno in alumnos.keys():
+        promedios[alumno] = promedio(alumnos[alumno])
+    return promedios
+# print(promedio_alumnos("notas_estudiantes.cvs"))
+
+# Ejercicio 20. Implementar la funci´on laPalabraMasFrecuente(in nombre archivo : str) → str que devuelve la palabra que
+# m´as veces aparece en un archivo de texto
+def la_palabra_mas_frecuente(path: str) -> str:
+    palabras: Dict[str, int] = agrupar_por_longitud(path)
+    maxima_cantidad: int = 0
+    palabra_mas_repetida: str = ""
+    for palabra in palabras.keys():
+        if palabras[palabra] > maxima_cantidad:
+            palabra_mas_repetida = palabra
+            maxima_cantidad = palabras[palabra]
+    return palabra_mas_repetida
+# print(la_palabra_mas_frecuente(ejemplo))
